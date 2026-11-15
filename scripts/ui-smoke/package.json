@@ -1,6 +1,7 @@
 {
   "name": "webcodex-isolated-ui-smoke",
   "private": true,
+  "packageManager": "bun@1.4.4",
   "type": "module",
   "scripts": {
     "test": "node smoke.mjs && node desktop-long-activity.mjs",

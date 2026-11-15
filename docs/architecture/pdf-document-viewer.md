@@ -126,9 +126,9 @@ npm --prefix frontend run build:work-result
 node --test frontend/test/pdf-document-reader.test.mjs frontend/test/pdf-continuous-preview.test.mjs
 cargo test --locked -p webcodex --lib pdf_document
 cargo test --locked -p webcodex --lib pdf_document_app
-npm --prefix scripts/ui-smoke ci
-npm --prefix scripts/ui-smoke exec -- playwright install chromium
-npm --prefix scripts/ui-smoke run test:pdf
+bun install --cwd scripts/ui-smoke --frozen-lockfile --ignore-scripts
+bun x --cwd scripts/ui-smoke --no-install playwright install chromium
+bun run --cwd scripts/ui-smoke test:pdf
 ```
 
 `frontend/scripts/build-pdf-document.mjs --check` is part of distribution

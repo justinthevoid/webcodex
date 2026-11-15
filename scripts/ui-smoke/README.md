@@ -9,21 +9,21 @@ npm --prefix frontend ci
 npm --prefix frontend run build
 npm --prefix apps/desktop ci
 npm --prefix apps/desktop run build
-npm --prefix scripts/ui-smoke ci
+bun install --cwd scripts/ui-smoke --frozen-lockfile --ignore-scripts
 # Needed where no installed macOS Google Chrome is available:
-cd scripts/ui-smoke && npx playwright install chromium && cd ../..
-npm --prefix scripts/ui-smoke test
+bun x --cwd scripts/ui-smoke --no-install playwright install chromium
+bun run --cwd scripts/ui-smoke test
 ```
 
 The script checks 1440, 1280, 1024, 768, and 390-pixel viewports in light and dark themes, the current Work / Projects / Runtime WebUI, all Desktop navigation destinations, Connection profile creation and credential containment, exact project selection/addition, exact-target instruction/Skill saves, native Plugin registration, keyboard navigation, foreground permission explanation, explicit Workflow Session vs Window activity, preserved drafts, and the Admin access gate and dashboard. It verifies row and section alignment, bounded long paths, dialog focus and dismissal, and horizontal overflow. It also emulates reduced transparency and reduced motion in Chromium.
 
 Screenshots and `report.json` are regenerated in `artifacts/liquid-glass-ui/` (ignored by Git). The report explicitly says `fixture: true` and `nativeBackend: false`. Browser errors fail the run; the browser and server close in `finally`.
 
-For the dedicated PDF reader, run `npm --prefix scripts/ui-smoke run test:pdf`
+For the dedicated PDF reader, run `bun run --cwd scripts/ui-smoke test:pdf`
 after `node frontend/scripts/build-pdf-document.mjs`. This uses the shipped HTML
 and actual PDF.js Worker with original, deterministic PDF fixtures; it needs no
 WebCodex backend or frontend app build. Install Chromium with
-`npm --prefix scripts/ui-smoke exec -- playwright install chromium`, or set
+`bun x --cwd scripts/ui-smoke --no-install playwright install chromium`, or set
 `WEBCODEX_SMOKE_BROWSER` to an installed Chrome/Chromium executable. It covers
 800/390-pixel layouts, mixed page sizes, rotation, text-layer alignment, embedded
 Chinese Type3 glyphs/selection/search, scan image pixel colors, rapid zoom and
@@ -39,7 +39,7 @@ golden images. Errors and external PDF fetches fail the run. Outputs are ignored
 under `artifacts/pdf-reader/`. To check a prior HTML build without replacing the
 checkout, use `node scripts/ui-smoke/pdf-document-reader.mjs --html PATH`.
 
-For interactive Browser Use, run `npm --prefix scripts/ui-smoke run serve` and use the printed loopback URL. Routes are `/runtime/`, `/desktop/`, `/admin/`, `/desktop/?state=disconnected`, and `/desktop/?permissions`. The server expires after 30 minutes. Stop only its exact owned process when finished.
+For interactive Browser Use, run `bun run --cwd scripts/ui-smoke serve` and use the printed loopback URL. Routes are `/runtime/`, `/desktop/`, `/admin/`, `/desktop/?state=disconnected`, and `/desktop/?permissions`. The server expires after 30 minutes. Stop only its exact owned process when finished.
 
 This is not a substitute for native permission, installer, real Tunnel, or Windows platform testing. Native Rust tests independently cover configuration preservation, stale-target rejection, process ownership, project inventory, and Server/Runner PID preservation on failed Tunnel replacement.
 
